@@ -7,8 +7,8 @@ A Flask application for calculating USPS shipping zones based on origin and dest
 1. Clone the repository
 
 ```bash
-git clone [your-repository-url]
-cd [repository-name]
+git clone https://github.com/AustonianAI/usps-zone-calculator.git
+cd usps-zone-calculator
 ```
 
 2. Create and activate virtual environment
