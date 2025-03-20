@@ -29,6 +29,12 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
+4. Start the Flask application
+
+```bash
+flask run
+```
+
 ## Usage
 
 The application provides a command-line interface to calculate shipping zones:
@@ -43,7 +49,11 @@ For example:
 flask calc-zone 78701 94016
 ```
 
-This will:
+This command will output:
+
+```
+Zone: 7
+```
 
 1. Find the corresponding row in Format2.txt based on the origin ZIP code's first three digits
 2. Calculate the appropriate column based on the destination ZIP code's first three digits
