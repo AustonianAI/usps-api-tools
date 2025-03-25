@@ -4,55 +4,8 @@ from typing import Dict, Optional
 
 from auth.usps_oauth import USPSOAuth2
 
-# Create a global session manager instance
+# Create a global sewssion manager instance
 oauth_manager = USPSOAuth2("https://api.usps.com/oauth2/v3/token")
-
-
-def get_usps_access_token() -> str:
-    """
-    Get an OAuth2 access token from USPS using client credentials flow.
-
-    Returns:
-        str: The access token
-
-    Raises:
-        requests.exceptions.RequestException: If the token request fails
-        ValueError: If credentials are invalid
-    """
-    token_url = "https://api.usps.com/oauth2/v3/token"
-
-    # Get credentials from environment variables
-    client_id = os.getenv("USPS_CONSUMER_KEY")
-    client_secret = os.getenv("USPS_CONSUMER_SECRET")
-
-    if not client_id or not client_secret:
-        raise ValueError("Missing USPS credentials in environment variables")
-
-    # Request body for client credentials flow
-    data = {
-        "grant_type": "client_credentials",
-        "client_id": client_id,
-        "client_secret": client_secret,
-        "redirect_uri": "hatcherybrain.com",
-    }
-
-    try:
-        response = requests.post(
-            token_url,
-            auth=(client_id, client_secret),
-            data=data
-        )
-
-        response.raise_for_status()
-        token_data = response.json()
-
-        return token_data
-
-    except requests.exceptions.HTTPError as e:
-        if response.status_code == 401:
-            raise ValueError("Invalid USPS credentials")
-        else:
-            raise e
 
 
 def track_usps_package(tracking_number: str, expand: str = "SUMMARY") -> Dict:
