@@ -1,3 +1,6 @@
+import os
+
+
 def find_zone_row(origin_zip):
     """
     Find the row in the zone matrix for the given origin zip code.
@@ -6,7 +9,11 @@ def find_zone_row(origin_zip):
     """
     zip_prefix = origin_zip.strip()[:3]
 
-    with open('Format2.txt', 'r') as file:
+    # Get the absolute path to the data directory
+    current_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    file_path = os.path.join(current_dir, 'data', 'Format2.txt')
+
+    with open(file_path, 'r') as file:
         for line_number, line in enumerate(file, 1):
             # Check characters at positions 1-3 (index 0-2)
             if line[0:3] == zip_prefix:

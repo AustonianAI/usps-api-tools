@@ -1,75 +1,165 @@
-# USPS Shipping Zone Calculator
+# USPS Tools and API Integrations
 
-A Flask application for calculating USPS shipping zones based on origin and destination ZIP codes.
+This Flask application provides integration with the USPS Tracking API v3, allowing you to track packages and calculate shipping zones.
 
 ## Setup
 
-1. Clone the repository
+1. Clone the repository:
 
-```bash
-git clone https://github.com/AustonianAI/usps-zone-calculator.git
-cd usps-zone-calculator
-```
+   ```bash
+   git clone https://github.com/AustonianAI/usps-api-tools
+   cd usps-api-tools
+   ```
 
-2. Create and activate virtual environment
+2. Install required packages:
 
-```bash
-# Windows
-python -m venv venv
-venv\Scripts\activate
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-# Mac/Linux
-python -m venv venv
-source venv/bin/activate
-```
+3. Set up environment variables:
 
-3. Install dependencies
+   ```bash
+   cp .env.example .env
+   ```
 
-```bash
-pip install -r requirements.txt
-```
+4. Edit `.env` and fill in your USPS API credentials:
 
-4. Start the Flask application
+   ```bash
+   nano .env  # or use your preferred editor
+   ```
 
-```bash
-flask run
-```
+   Required environment variables:
+
+   - `USPS_CONSUMER_KEY`: Your USPS API consumer key
+   - `USPS_CONSUMER_SECRET`: Your USPS API consumer secret
+
+## Authentication
+
+The application uses OAuth2 for USPS API authentication with a hybrid storage system:
+
+- **CLI Commands**: Tokens are stored in `.cache/usps_token.json`
+- **Web Requests**: Tokens are stored in Flask sessions (no HTTP requests are implemented yet, just CLI commands)
+
+Token management features:
+
+- Automatic token refresh when expired
+- Secure storage in both web and CLI contexts
+- Automatic retry on authentication failures
 
 ## Usage
 
-The application provides a command-line interface to calculate shipping zones:
+### CLI Commands
+
+1. Track a USPS package:
 
 ```bash
-flask calc-zone [origin_zip] [destination_zip]
+flask track 9400100000000000000000
 ```
 
-For example:
+2. Calculate shipping zone:
 
 ```bash
-flask calc-zone 78701 94016
+flask zone 94016 78701
 ```
 
-This command will output:
+## Token Storage
 
-```
-Zone: 7
-```
+### Web Sessions
 
-1. Find the corresponding row in Format2.txt based on the origin ZIP code's first three digits
-2. Calculate the appropriate column based on the destination ZIP code's first three digits
-3. Return the shipping zone for that origin-destination pair
+- Tokens for web requests are stored in Flask sessions
+- Secured by `FLASK_SECRET_KEY`
+- Automatically handled per user session
+
+### CLI Cache
+
+- CLI tokens stored in `.cache/usps_token.json`
+- Cache directory is automatically created
+- Tokens include expiration timestamps
+- Cache is automatically cleared when tokens expire
+
+## Security Notes
+
+1. Never commit:
+
+   - `.env` file with real credentials
+   - `.cache` directory contents
+   - `FLASK_SECRET_KEY`
+
+2. In production:
+   - Use a strong `FLASK_SECRET_KEY`
+   - Secure the `.cache` directory permissions
+   - Use environment variables for all sensitive data
+
+## Development
+
+The application uses:
+
+- Flask for web framework
+- Click for CLI commands
+- Requests for API communication
+- OAuth2 for USPS authentication
+
+## Error Handling
+
+The application includes:
+
+- Token expiration handling
+- Automatic token refresh
+- Invalid credential detection
+- API error handling
+- Retry logic for failed requests
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a new Pull Request
+
+## License
+
+[MIT License](LICENSE)
+
+Be excellent to each other.
 
 ## Project Structure
 
-```
-.
-├── app.py          # Main Flask application with CLI commands
-├── utils.py        # Utility functions for zone calculations
-├── Format2.txt     # USPS zone matrix data file
-├── requirements.txt
-├── .gitignore
-└── README.md
-```
+├── auth/
+│ └── usps_oauth.py # OAuth2 token management
+├── data/
+│ └── Format2.txt # USPS zone matrix data file
+├── utils/
+│ ├── tracking.py # USPS tracking functionality
+│ └── zone.py # Zone calculation utilities
+├── .cache/ # Token storage for CLI operations (auto-generated)
+├── .env.example # Example environment configuration
+├── app.py # Main Flask application with CLI commands
+├── requirements.txt # Python package dependencies
+├── .gitignore # Git ignore rules
+└── README.md # Project documentation
+
+The application is organized into several modules:
+
+- `auth/`: Contains OAuth2 authentication handling
+
+  - `usps_oauth.py`: Manages token storage and retrieval for both CLI and web contexts
+
+- `data/`: Contains data files needed for calculations
+
+  - `Format2.txt`: USPS zone matrix data file for zone calculations
+
+- `utils/`: Contains core functionality modules
+
+  - `tracking.py`: USPS tracking API integration
+  - `zone.py`: Zone calculation utilities
+  - `__init__.py`: Package initialization
+
+- `.cache/`: Auto-generated directory for storing OAuth tokens in CLI mode
+  - `usps_token.json`: Temporary token storage (auto-generated)
+
+Note: The `.cache/` directory and its contents are automatically managed by the application and should not be committed to version control.
 
 ## Technical Details
 
