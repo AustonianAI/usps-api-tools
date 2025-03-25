@@ -126,6 +126,7 @@ Be excellent to each other.
 
 ## Project Structure
 
+```markdown
 ├── auth/
 │ └── usps_oauth.py # OAuth2 token management
 ├── data/
@@ -139,6 +140,7 @@ Be excellent to each other.
 ├── requirements.txt # Python package dependencies
 ├── .gitignore # Git ignore rules
 └── README.md # Project documentation
+```
 
 The application is organized into several modules:
 
