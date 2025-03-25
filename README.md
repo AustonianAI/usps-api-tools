@@ -1,63 +1,72 @@
-# USPS Shipping Zone Calculator
+# USPS Tools and API Integrations
 
-A Flask application for calculating USPS shipping zones based on origin and destination ZIP codes.
+This Flask application provides integration with the USPS Tracking API v3, allowing you to track packages and calculate shipping zones.
 
 ## Setup
 
-1. Clone the repository
+1. Clone the repository:
 
-```bash
-git clone https://github.com/AustonianAI/usps-zone-calculator.git
-cd usps-zone-calculator
-```
+   ```bash
+   git clone [your-repository-url]
+   cd [repository-name]
+   ```
 
-2. Create and activate virtual environment
+2. Install required packages:
 
-```bash
-# Windows
-python -m venv venv
-venv\Scripts\activate
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-# Mac/Linux
-python -m venv venv
-source venv/bin/activate
-```
+3. Set up environment variables:
 
-3. Install dependencies
+   ```bash
+   cp .env.example .env
+   ```
 
-```bash
-pip install -r requirements.txt
-```
+4. Edit `.env` and fill in your USPS API credentials:
 
-4. Start the Flask application
+   ```bash
+   nano .env  # or use your preferred editor
+   ```
 
-```bash
-flask run
-```
+   Required environment variables:
+
+   - `USPS_CONSUMER_KEY`: Your USPS API consumer key
+   - `USPS_CONSUMER_SECRET`: Your USPS API consumer secret
 
 ## Usage
 
-The application provides a command-line interface to calculate shipping zones:
+### Track a Package
+
+Use the Flask CLI command to track a package:
+
+```bash
+flask tracking-number [tracking-number]
+```
+
+This will:
+
+- Authenticate with the USPS API
+- Retrieve tracking information
+- Save the data to `tracking_data.json`
+
+### Calculate Shipping Zone
+
+Calculate the shipping zone between two ZIP codes:
 
 ```bash
 flask calc-zone [origin_zip] [destination_zip]
 ```
 
-For example:
+## Development
 
-```bash
-flask calc-zone 78701 94016
-```
+The application uses OAuth2 for authentication with the USPS API.
 
-This command will output:
+## Security Notes
 
-```
-Zone: 7
-```
-
-1. Find the corresponding row in Format2.txt based on the origin ZIP code's first three digits
-2. Calculate the appropriate column based on the destination ZIP code's first three digits
-3. Return the shipping zone for that origin-destination pair
+- Never commit your `.env` file
+- Keep your USPS API credentials secure
+- Always use HTTPS in production
 
 ## Project Structure
 
