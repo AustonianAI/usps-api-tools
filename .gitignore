@@ -37,4 +37,7 @@ var/
 # Distribution / packaging
 dist/
 build/
-*.egg-info/ 
+*.egg-info/
+
+# Cache directory
+.cache/ 

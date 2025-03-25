@@ -1,11 +1,14 @@
 import click
 from flask import Flask, json
-
+import os
 
 import utils.tracking as tracking
 import utils.zone as zone
 
 app = Flask(__name__)
+
+# Set a secret key for session management
+app.secret_key = os.getenv("FLASK_SECRET_KEY", "secret-dev-key")
 
 
 @app.cli.command('zone')
@@ -26,15 +29,9 @@ def calc_zone(origin_zip, destination_zip):
 @click.argument('tracking_number')
 def tracking_number(tracking_number):
     """Get the tracking number for a given tracking number"""
-
     print(f"Tracking number: {tracking_number}")
 
-    data = tracking.get_usps_access_token()
-
-    access_token = data['access_token']
-
-    tracking_data = tracking.track_usps_package(tracking_number, access_token, "DETAIL")
-
+    tracking_data = tracking.track_usps_package(tracking_number, "DETAIL")
     print(json.dumps(tracking_data, indent=4))
 
 
