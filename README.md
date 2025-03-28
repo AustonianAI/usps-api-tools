@@ -157,6 +157,7 @@ Be excellent to each other.
 ├── utils/
 │ ├── tracking.py # USPS tracking functionality
 │ └── zone.py # Zone calculation utilities
+│ └── ndc.py # NDC lookup utilities
 ├── .cache/ # Token storage for CLI operations (auto-generated)
 ├── .env.example # Example environment configuration
 ├── app.py # Main Flask application with CLI commands
@@ -180,7 +181,7 @@ The application is organized into several modules:
 
   - `tracking.py`: USPS tracking API integration
   - `zone.py`: Zone calculation utilities
-  - `__init__.py`: Package initialization
+  - `ndc.py`: NDC lookup utilities
 
 - `.cache/`: Auto-generated directory for storing OAuth tokens in CLI mode
   - `usps_token.json`: Temporary token storage (auto-generated)
@@ -195,7 +196,7 @@ The zone calculation process:
 2. `determine_zone_column`: Calculates the column position using the formula: ((first_three_digits - 1) \* 2) + 4
 3. `get_zone_from_row_and_column`: Retrieves the zone value from the intersection of the row and column
 
-Note: The application requires Format2.txt to be present in the project /data directory. This file contains the USPS zone matrix data.
+Note: The application requires both Format2.txt and DMM_L601.csv to be present in the project /data directory.
 
 ## Future Development
 
