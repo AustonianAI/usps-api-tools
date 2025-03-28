@@ -82,7 +82,7 @@ flask zone 94016 78701
 flask ndc 78701
 
 # The tool will return the appropriate NDC label, for example:
-# NDC for 78701: NDC DALLAS TX 75199
+# NDC NEW JERSEY NJ 07097
 ```
 
 ## Token Storage
@@ -153,6 +153,7 @@ Be excellent to each other.
 │ └── usps_oauth.py # OAuth2 token management
 ├── data/
 │ └── Format2.txt # USPS zone matrix data file
+│ └── DMM_L601.csv # USPS NDC data file for NDC lookup
 ├── utils/
 │ ├── tracking.py # USPS tracking functionality
 │ └── zone.py # Zone calculation utilities
@@ -194,7 +195,7 @@ The zone calculation process:
 2. `determine_zone_column`: Calculates the column position using the formula: ((first_three_digits - 1) \* 2) + 4
 3. `get_zone_from_row_and_column`: Retrieves the zone value from the intersection of the row and column
 
-Note: The application requires Format2.txt to be present in the project root directory. This file contains the USPS zone matrix data.
+Note: The application requires Format2.txt to be present in the project /data directory. This file contains the USPS zone matrix data.
 
 ## Future Development
 
@@ -213,32 +214,6 @@ Planned enhancements include:
 
 ## References
 
-For detailed information about USPS zone calculations and technical specifications, refer to the [USPS National Zone Charts Matrix Technical Guide](https://postalpro.usps.com/national-zone-charts-matrix/ZoneChartsMatrixTechnicalGuide)
+For detailed information about USPS zone calculations and technical specifications, refer to the [USPS National Zone Charts Matrix Technical Guide](https://postalpro.usps.com/national-zone-charts-matrix/ZoneChartsMatrixTechnicalGuide).
 
-### NDC (Network Distribution Center) Lookup
-
-The CLI includes a utility to look up the appropriate Network Distribution Center (NDC) label for any given ZIP code. This functionality uses USPS L601 data to determine the correct NDC for mail distribution.
-
-#### Usage
-
-```bash
-# Look up NDC for a ZIP code
-codepost ndc 12345
-
-# The tool will return the appropriate NDC label, for example:
-# NDC NEW JERSEY NJ 07097
-```
-
-#### Supported ZIP Code Formats
-
-- 3-digit ZIP codes (e.g., "123")
-- 5-digit ZIP codes (e.g., "12345")
-- ZIP+4 codes (e.g., "12345-6789")
-
-The tool automatically extracts the first three digits of any ZIP code format to determine the appropriate NDC.
-
-#### Notes
-
-- Based on USPS L601 labeling list data
-- Returns None if no matching NDC is found
-- Handles various ZIP code formats including leading zeros
+To see the data source for the USPS Network Distribution Center (NDC) lookup, refer to the [USPS Facility Access and Shipment Tracking (FAST) system](https://fast.usps.com/fast/fastApp/resources/labelListFilesSearch.action).
