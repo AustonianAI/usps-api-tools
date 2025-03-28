@@ -54,13 +54,35 @@ Token management features:
 1. Track a USPS package:
 
 ```bash
+# Track a USPS package
 flask track 9400100000000000000000
+
+# The tool will return the tracking information, for example:
+# Tracking number: 9400100000000000000000
+# Status: Delivered
+# Delivery date: 2024-01-01
+# Delivery location: 123 Main St, Anytown, USA
+# Delivery time: 10:00 AM
 ```
 
 2. Calculate shipping zone:
 
 ```bash
+# Calculate shipping zone for origin ZIP code 94016 and destination ZIP code 78701
 flask zone 94016 78701
+
+# The tool will return the appropriate zone, for example:
+# Zone: 7
+```
+
+3. NDC (Network Distribution Center) Lookup
+
+```bash
+# Look up NDC for a ZIP code
+flask ndc 78701
+
+# The tool will return the appropriate NDC label, for example:
+# NDC for 78701: NDC DALLAS TX 75199
 ```
 
 ## Token Storage
@@ -151,6 +173,7 @@ The application is organized into several modules:
 - `data/`: Contains data files needed for calculations
 
   - `Format2.txt`: USPS zone matrix data file for zone calculations
+  - `DMM_L601.csv`: USPS NDC data file for NDC lookup
 
 - `utils/`: Contains core functionality modules
 
@@ -191,3 +214,31 @@ Planned enhancements include:
 ## References
 
 For detailed information about USPS zone calculations and technical specifications, refer to the [USPS National Zone Charts Matrix Technical Guide](https://postalpro.usps.com/national-zone-charts-matrix/ZoneChartsMatrixTechnicalGuide)
+
+### NDC (Network Distribution Center) Lookup
+
+The CLI includes a utility to look up the appropriate Network Distribution Center (NDC) label for any given ZIP code. This functionality uses USPS L601 data to determine the correct NDC for mail distribution.
+
+#### Usage
+
+```bash
+# Look up NDC for a ZIP code
+codepost ndc 12345
+
+# The tool will return the appropriate NDC label, for example:
+# NDC NEW JERSEY NJ 07097
+```
+
+#### Supported ZIP Code Formats
+
+- 3-digit ZIP codes (e.g., "123")
+- 5-digit ZIP codes (e.g., "12345")
+- ZIP+4 codes (e.g., "12345-6789")
+
+The tool automatically extracts the first three digits of any ZIP code format to determine the appropriate NDC.
+
+#### Notes
+
+- Based on USPS L601 labeling list data
+- Returns None if no matching NDC is found
+- Handles various ZIP code formats including leading zeros

@@ -16,10 +16,9 @@ app.secret_key = os.getenv("FLASK_SECRET_KEY", "secret-dev-key")
 @click.argument("zip_code")
 def lookup_ndc(zip_code):
     """Get the NDC for a given zip code"""
-    print(f"NDC for {zip_code}")
 
     ndc_label = ndc.get_ndc_label(zip_code)
-    print(f"NDC label: {ndc_label}")
+    print(f"NDC for {zip_code}: {ndc_label}")
 
 
 @app.cli.command('zone')

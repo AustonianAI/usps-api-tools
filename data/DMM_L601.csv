@@ -1,3 +1,18 @@
+"Effective Date: 2025-05-01"
+"Grace Date: 2025-06-30"
+
+"L601 Network Distribution Centers (NDCs)"
+"L601 describes the service area by individual 3-digit ZIP Code prefix for sorting mail to NDC destinations."
+"Use this list for:"
+"a. Standard Mail machinable parcels except ASF mail (other than mail for the Buffalo ASF service area) prepared and claimed at DNDC prices. Parcels for the Buffalo ASF service area prepared and claimed at DNDC prices must be sorted to the Pittsburgh NDC."
+"b. Standard Mail bundles, letter trays, or sacks on pallets."
+"c. Bound Printed Matter machinable parcels except ASF mail (other than mail for the Buffalo ASF service area) prepared and claimed at DNDC prices. Machinable parcels for the Buffalo ASF service area prepared and claimed at DNDC prices must be sorted to the Pittsburgh NDC."
+"d. Bound Printed Matter bundles or sacks on pallets."
+"e. Parcel Select except for ASF mail (other than mail for the Buffalo ASF service area) prepared and claimed at DNDC prices. Machinable parcels for the Buffalo ASF service area prepared and claimed at DNDC prices must be sorted to the Pittsburgh NDC. Nonmachinable parcels for the Buffalo ASF service area claimed at DNDC prices may be sorted to the Pittsburgh NDC if bedloaded and presented with machinable parcels."
+"f. Presorted Media Mail and Presorted Library Mail to NDC destinations."
+"For labeling mixed NDC sacks and pallets, mailers must add "MXD" before the Column B information of the NDC serving the 3-digit ZIP Code prefix of the post office at which the mail is entered."
+"1.  Mailed from Zip Code Areas 006-009.  2.  Mail for the following Zip Code ranges is not eligible for DNDC discount prices: 006-009, 967-969, and 995-999, except as allowed under DMM 256.2.17, 256.2.18, 266.4.3, or 705.6.4.1."
+
 "Column A Destination ZIP Codes","Column B Label To"
 "	005, 066, 068-079, 085-119","	NDC NEW JERSEY NJ 07097"
 "	006-009","	SCF SAN JUAN PR 006","	FT1"

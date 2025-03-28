@@ -26,23 +26,40 @@ def parse_zip_range(zip_range: str) -> set[int]:
 
 def get_ndc_label(zip_code: str) -> Optional[str]:
     """
-    Find the NDC label for a given 3-digit ZIP code.
+    Find the NDC label for a given ZIP code.
 
     Args:
-        zip_code: A 3-digit ZIP code string (e.g. "240" or "082")
+        zip_code: A ZIP code string (e.g. "24060", "08234", "082", "00123-4567")
 
     Returns:
         The corresponding NDC label or None if not found
     """
-    # Convert input to integer for comparison
-    zip_int = int(zip_code)
+    # Clean up the zip code and get first 3 digits
+    cleaned_zip = zip_code.strip().replace('-', '')[:3]
+
+    try:
+        # Convert to integer for comparison
+        zip_int = int(cleaned_zip)
+    except ValueError:
+        print(f"Invalid ZIP code format: {zip_code}")
+        return None
 
     with open('data/DMM_L601.csv', 'r') as f:
-        reader = csv.DictReader(f)
+        reader = csv.reader(f)
 
+        # Find the header row
         for row in reader:
-            zip_range = row['Column A Destination ZIP Codes'].strip()
-            label = row['Column B Label To'].strip()
+            if row and row[0].strip() == 'Column A Destination ZIP Codes':
+                # Found the header row, now we can process the data
+                break
+
+        # Process the actual data rows
+        for row in reader:
+            if not row:  # Skip empty rows
+                continue
+
+            zip_range = row[0].strip()
+            label = row[1].strip()
 
             # Parse the zip range and check if our zip code is in it
             valid_zips = parse_zip_range(zip_range)
