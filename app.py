@@ -1,15 +1,26 @@
 import click
 from flask import Flask, json
 import os
+import logging
 
 import utils.tracking as tracking
 import utils.zone as zone
 import utils.ndc as ndc
+from payments import USPSPayments
+
+# Configure logging
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
 
 app = Flask(__name__)
 
 # Set a secret key for session management
 app.secret_key = os.getenv("FLASK_SECRET_KEY", "secret-dev-key")
+
+# Configure Flask logging
+app.logger.setLevel(logging.DEBUG)
 
 
 @app.cli.command("ndc")
@@ -43,6 +54,37 @@ def tracking_number(tracking_number):
 
     tracking_data = tracking.track_usps_package(tracking_number, "DETAIL")
     print(json.dumps(tracking_data, indent=4))
+
+
+@app.cli.command('payments')
+@click.option('--test/--prod', default=True, help='Use test environment (default) or production')
+@click.option('--output', type=click.Path(), help='Save token to file (optional)')
+def payments(test, output):
+    """Get a USPS payment authorization token"""
+    try:
+        # Initialize payments client
+        payments_client = USPSPayments(use_test=test)
+
+        # Get payment authorization
+        result = payments_client.get_payment_authorization()
+
+        # Print the token
+        click.echo("\nPayment Authorization Token:")
+        click.echo("-" * 50)
+        click.echo(result['paymentAuthorizationToken'])
+        click.echo("\nFull Response:")
+        click.echo("-" * 50)
+        click.echo(json.dumps(result, indent=2))
+
+        # Save to file if output path provided
+        if output:
+            with open(output, 'w') as f:
+                json.dump(result, f, indent=2)
+            click.echo(f"\nToken saved to {output}")
+
+    except Exception as e:
+        click.echo(f"Error getting payment token: {str(e)}", err=True)
+        raise click.Abort()
 
 
 if __name__ == '__main__':
