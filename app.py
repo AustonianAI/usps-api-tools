@@ -1,15 +1,25 @@
 import click
 from flask import Flask, json
 import os
+import logging
 
 import utils.tracking as tracking
 import utils.zone as zone
 import utils.ndc as ndc
 
+# Configure logging
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+
 app = Flask(__name__)
 
 # Set a secret key for session management
 app.secret_key = os.getenv("FLASK_SECRET_KEY", "secret-dev-key")
+
+# Configure Flask logging
+app.logger.setLevel(logging.DEBUG)
 
 
 @app.cli.command("ndc")
