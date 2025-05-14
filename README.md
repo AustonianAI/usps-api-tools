@@ -1,6 +1,123 @@
-# USPS Tools and API Integrations
+# USPS API Python Tools
 
-This Flask application provides integration with the USPS Tracking API v3, allowing you to track packages and calculate shipping zones.
+A Python application to demonstrate interacting with the USPS APIs.
+
+## Features
+
+- Calculate shipping zones between origin and destination ZIP codes
+- Track USPS packages with detailed status information
+- Get payment authorization tokens for USPS API access
+- Automatic token caching and management for both OAuth and payment tokens
+
+## Prerequisites
+
+- Python 3.8+
+- USPS API credentials (requires USPS approval)
+- USPS Business Account with appropriate permissions
+
+## USPS API Access
+
+This application uses several USPS APIs that require approval:
+
+1. **Tracking API**: For package tracking functionality
+2. **Payments API**: For payment authorization tokens
+
+To get access to these APIs:
+
+1. Create a USPS Business Account through the [USPS Customer Onboarding Portal](https://developers.usps.com/getting-started)
+2. Log in to the [USPS Developer Portal](https://developers.usps.com/getting-started)
+3. Create an application and select the required API products
+4. Retrieve your Consumer Key and Secret
+5. Authorize your application to access protected information resources
+
+For more detailed information about the approval process, please visit the [USPS Getting Started Guide](https://developers.usps.com/getting-started).
+
+## Environment Variables
+
+Create a `.env` file in the project root with the following variables:
+
+```bash
+# USPS API Configuration
+USPS_API_BASE_URL=https://apis.usps.com
+USPS_API_TEST_URL=https://apis-tem.usps.com
+
+# USPS OAuth Credentials
+USPS_CONSUMER_KEY=your_consumer_key
+USPS_CONSUMER_SECRET=your_consumer_secret
+
+# USPS Payment Configuration
+USPS_PAYMENT_CRID=your_crid
+USPS_PAYMENT_MID=your_mid
+USPS_PAYMENT_MANIFEST_MID=your_manifest_mid
+USPS_PAYMENT_ACCOUNT_TYPE=EPS
+USPS_PAYMENT_ACCOUNT_NUMBER=your_account_number
+
+# Flask Configuration
+FLASK_SECRET_KEY=your_secret_key
+```
+
+## Installation
+
+1. Clone the repository
+2. Create a virtual environment:
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
+3. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+4. Set up your environment variables
+5. Run the application:
+   ```bash
+   flask run
+   ```
+
+## Usage
+
+### Calculate Shipping Zone
+
+```bash
+flask zone <origin_zip> <destination_zip>
+```
+
+### Track Package
+
+```bash
+flask track <tracking_number>
+```
+
+### Get Payment Authorization Token
+
+```bash
+flask payments
+```
+
+Options:
+
+- `--test/--prod`: Use test or production environment (default: test)
+- `--output`: Save token to file (optional)
+
+The payment token is automatically cached in `.cache/usps_payments_token.json` and will be reused if valid (tokens expire after 8 hours).
+
+## Project Structure
+
+```
+.
+├── .cache/                    # Token cache directory
+├── auth/                      # Authentication modules
+├── payments/                  # Payment-related modules
+├── utils/                     # Utility modules
+├── app.py                     # Main application
+├── config.py                  # Main configuration
+├── payments_config.py         # Payment-specific configuration
+└── requirements.txt           # Project dependencies
+```
+
+## License
+
+[Your License Here]
 
 ## Setup
 
