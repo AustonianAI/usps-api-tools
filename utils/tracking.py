@@ -3,9 +3,10 @@ import os
 from typing import Dict, Optional
 
 from auth.usps_oauth import USPSOAuth2
+from config import get_tracking_url
 
-# Create a global sewssion manager instance
-oauth_manager = USPSOAuth2("https://apis.usps.com/oauth2/v3/token")
+# Create a global session manager instance
+oauth_manager = USPSOAuth2()
 
 
 def track_usps_package(tracking_number: str, expand: str = "SUMMARY") -> Dict:
@@ -24,7 +25,7 @@ def track_usps_package(tracking_number: str, expand: str = "SUMMARY") -> Dict:
         requests.exceptions.RequestException: If the API request fails
         ValueError: If the tracking number is invalid or not found
     """
-    base_url = "https://apis.usps.com/tracking/v3"
+    base_url = get_tracking_url()
     endpoint = f"/tracking/{tracking_number}"
 
     # Get a valid token using the session manager

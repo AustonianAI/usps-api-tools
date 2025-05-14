@@ -6,6 +6,7 @@ import os
 import json
 from pathlib import Path
 import logging
+from config import get_oauth_url
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -14,8 +15,8 @@ logger = logging.getLogger(__name__)
 class USPSOAuth2:
     """Manages OAuth2 token storage and retrieval using either Flask sessions or file storage"""
 
-    def __init__(self, token_url: str):
-        self.token_url = token_url
+    def __init__(self, use_test: bool = False):
+        self.token_url = get_oauth_url(use_test)
         self.session_key = 'usps_oauth'
         # Create a .cache directory in the project root if it doesn't exist
         self.cache_dir = Path(__file__).parent.parent / '.cache'

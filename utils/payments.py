@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 import requests
 import logging
 from auth.usps_oauth import USPSOAuth2
+from config import get_payments_url
 
 # Configure logging for the payments module
 logger = logging.getLogger(__name__)
@@ -11,13 +12,11 @@ logger = logging.getLogger(__name__)
 class USPSPayments:
     """Handles USPS payment operations including authorization and token management"""
 
-    PAYMENT_AUTH_ENDPOINT = "https://apis-tem.usps.com/payments/v3/payment-authorization"
-    OAUTH_TOKEN_URL = "https://apis.usps.com/oauth2/v3/token"
-
-    def __init__(self):
+    def __init__(self, use_test: bool = True):
         """Initialize the payments client with its own OAuth manager"""
         logger.info("Initializing USPS Payments client")
-        self.oauth_client = USPSOAuth2(self.OAUTH_TOKEN_URL)
+        self.oauth_client = USPSOAuth2(use_test)
+        self.payment_auth_endpoint = f"{get_payments_url(use_test)}/payment-authorization"
         # Clear any existing tokens on initialization
         self.oauth_client.clear_token()
 
@@ -67,9 +66,9 @@ class USPSPayments:
         logger.debug(f"Payment authorization payload: {payload}")
 
         try:
-            logger.debug(f"Making POST request to {self.PAYMENT_AUTH_ENDPOINT}")
+            logger.debug(f"Making POST request to {self.payment_auth_endpoint}")
             response = requests.post(
-                self.PAYMENT_AUTH_ENDPOINT,
+                self.payment_auth_endpoint,
                 headers=headers,
                 json=payload
             )
